@@ -26,4 +26,16 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+	
+		<!-- "ContextLoaderListenr" ties the ApplicationContext lifeCycle to ServletContext lifecycle and automate the creation of ApplicationContext.
+		Application context is the place for spring bean and we can provide its configuration through "contextConfigurationLocation" context parameter.
+		
+		"DispatcherServlet" is the controller for Spring MVC application and all the client request are getting handled by this servlet. 
+	 -->
+
+	<error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/404.jsp</location>
+    </error-page>
+	
 </web-app>

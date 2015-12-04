@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.config.CustomEditorConfigurer;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mahesh.bean.Student;
+import com.mahesh.exception.StudentInvalidNameException;
 import com.mahesh.property.CustomNamePropertyEditor;
 
 @Controller
@@ -128,11 +131,15 @@ public class StudentAdmissionController {
 	 *  and also understand about the BindingResult (this is mainly when there is an error in the jsp fields.
 	 */
 	@RequestMapping(value = "/submitAdmissionForm.html", method = RequestMethod.POST)
-	public ModelAndView submitAdmissionForm(@Valid @ModelAttribute("student") final Student student, BindingResult result) {
+	public ModelAndView submitAdmissionForm(@Valid @ModelAttribute("student") final Student student, 
+			BindingResult result) throws Exception {
 		
 		if(result.hasErrors()) {
 			ModelAndView model = new ModelAndView("AdmissionForm");
 			return model;
+		}
+		if("Mr.Mahesh".equals(student.getStudentName())) {
+			throw new StudentInvalidNameException(student.getStudentName());
 		}
 		ModelAndView model = new ModelAndView("AdmissionSuccess");		
 		return model;
@@ -154,4 +161,19 @@ public class StudentAdmissionController {
 		model.addAttribute("message", "IBM INDIA PVT LTD");
 	}
 	
+	/**
+	 * 
+	 * Notice that for EmployeeNotFoundException handler, I am returning ModelAndView and hence http status code will be sent as OK (200).
+	 */
+	@ExceptionHandler(StudentInvalidNameException.class)
+	public ModelAndView handleInvalidStudentNameException(final HttpServletRequest request, Exception ex) {
+		System.out.println("handleInvalidStudentNameException()...");
+		ModelAndView model = new ModelAndView();
+		model.addObject("exception", ex);
+		model.addObject("url", request.getRequestURL());
+		
+		model.setViewName("error");
+		return model;
+		
+	}
 }
