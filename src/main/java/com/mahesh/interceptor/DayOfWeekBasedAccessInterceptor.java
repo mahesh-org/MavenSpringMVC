@@ -26,7 +26,7 @@ public class DayOfWeekBasedAccessInterceptor extends HandlerInterceptorAdapter {
 		throws Exception {
 		long startTime = System.currentTimeMillis();
         System.out.println("Request URL::" + request.getRequestURL().toString() + ":: Start Time=" + System.currentTimeMillis());
-        request.setAttribute("startTime: ", startTime);
+        request.setAttribute("startTime", startTime);
         
         
 		Calendar cal = Calendar.getInstance();

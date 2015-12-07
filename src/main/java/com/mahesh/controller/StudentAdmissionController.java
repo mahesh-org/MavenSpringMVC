@@ -28,6 +28,16 @@ import com.mahesh.property.CustomNamePropertyEditor;
 @Controller
 public class StudentAdmissionController {
 	
+	@RequestMapping(value = "/empty", 
+			consumes="text/html",
+			produces={"application/json","application/xml"},
+			headers={"name=pankaj", "id=1"},
+			method = {RequestMethod.GET, RequestMethod.POST}
+			)
+	public void empty() {
+		
+	}
+	
 	@RequestMapping(value = "/admissionForm.html", method = RequestMethod.GET)
 	public ModelAndView getAdmissionForm() {
 		ModelAndView model = new ModelAndView("AdmissionForm");
